@@ -112,7 +112,7 @@ cluster <- function(Y, q, df_j, init = rep(1, nrow(Y)),
 #' @export
 #' @rdname spatialCluster
 spatialCluster <- function(sce, q, use.dimred = "PCA", d = 15,
-    platform=c("Visium", "ST"),
+    platform=c("Visium", "ST","SS"),
     init = NULL, init.method = c("mclust", "kmeans"),
     model = c("t", "normal"), precision = c("equal", "variable"),
     nrep = 50000, burn.in=1000, gamma = NULL, mu0 = NULL, lambda0 = NULL,
