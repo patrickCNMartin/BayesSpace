@@ -278,7 +278,7 @@ spatialCluster <- function(sce, q, use.dimred = "PCA", d = 15,
                       yp <- mat$row
                       distance <- sqrt(((abs(xp-xo))^2 + (abs(yp-yo))^2))
                       distance <- distance[distance !=0]
-                      index <- order(distance,decreasing = FALSE)[1:10]
+                      index <- order(distance,decreasing = FALSE)[1:6]
                       index <- index - 1
                       index <- sort(index)
                       return(index)
