@@ -269,7 +269,9 @@ spatialCluster <- function(sce, q, use.dimred = "PCA", d = 15,
   # I will make the assumption that 6 neighbors are good enough
   # after some filtering
 
-  spot.positions <- colData(sce)[, c("col", "row")]
+  spot.positions <- as.data.frame(colData(sce))[, c("col", "row")]
+  spot.positions$col <- as.numeric(spot.positions$col)
+  spot.positions$row <- as.numeric(spot.positions$row)
   spot.positions$spot.idx <- seq_len(nrow(spot.positions))
   dist <- parallel::mclapply(seq_len(nrow(spot.positions)), function(idx,mat){
                       xo <- mat$col[idx]
