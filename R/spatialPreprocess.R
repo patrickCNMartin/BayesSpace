@@ -1,8 +1,8 @@
 #' Preprocess a spatial dataset for BayesSpace
-#' 
+#'
 #' Adds metadata required for downstream analyses, and (optionally) performs PCA
 #' on log-normalized expression of top HVGs.
-#' 
+#'
 #' @param sce SingleCellExperiment to preprocess
 #' @param platform Spatial sequencing platform. Used to determine spot layout
 #'   and neighborhood structure (Visium = hex, ST = square).
@@ -23,23 +23,23 @@
 #'   To perform a faster approximate PCA, please specify
 #'   \code{FastAutoParam()} and set a random seed to ensure
 #'   reproducibility.
-#' 
+#'
 #' @return SingleCellExperiment with PCA and BayesSpace metadata
-#' 
+#'
 #' @examples
 #' sce <- exampleSCE()
 #' sce <- spatialPreprocess(sce)
-#' 
+#'
 #' @export
 #' @importFrom scater logNormCounts runPCA
 #' @importFrom scran modelGeneVar getTopHVGs
 #' @importFrom SummarizedExperiment rowData<-
 #' @importFrom BiocSingular ExactParam
-spatialPreprocess <- function(sce, platform=c("Visium", "ST"),
+spatialPreprocess <- function(sce, platform=c("Visium", "ST","SS"),
                               n.PCs=15, n.HVGs=2000, skip.PCA=FALSE,
                               log.normalize=TRUE, assay.type="logcounts",
                               BSPARAM=ExactParam()) {
-    
+
     ## Set BayesSpace metadata
     metadata(sce)$BayesSpace.data <- list()
     metadata(sce)$BayesSpace.data$platform <- match.arg(platform)
@@ -51,10 +51,10 @@ spatialPreprocess <- function(sce, platform=c("Visium", "ST"),
     if (!skip.PCA) {
         if (log.normalize)
             sce <- logNormCounts(sce)
-   
+
         dec <- modelGeneVar(sce, assay.type=assay.type)
         top <- getTopHVGs(dec, n=n.HVGs)
-        sce <- runPCA(sce, subset_row=top, ncomponents=n.PCs, 
+        sce <- runPCA(sce, subset_row=top, ncomponents=n.PCs,
                       exprs_values=assay.type, BSPARAM=BSPARAM)
         rowData(sce)[["is.HVG"]] <- (rownames(sce) %in% top)
     }
